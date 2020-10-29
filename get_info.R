@@ -18,7 +18,13 @@ get_info <- function(excel, api_key){
     for(i in 1:nrow(data)){
         #Geocode company
         geodata <- geocode(data$name[i], output = "all", source = "google") #change data$name for data$ and the name of the column which contains company names
-        if(geodata[["status"]]=='OK') {
+        if (is.null(geodata[["status"]])) {
+            data$address[i] <- NA
+            data$city[i] <- NA
+            data$postal_code[i] <- NA
+            data$phone_number[i] <- NA
+            data$website[i] <- NA
+        } else if (geodata[["status"]]=='OK') {
             #Create variable address
             data$address[i] <- as.character(geodata[["results"]][[1]][["formatted_address"]])
             #Create variable city
